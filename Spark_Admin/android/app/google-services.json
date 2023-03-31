@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "180497422288",
+    "project_id": "spark-testing-372706",
+    "storage_bucket": "spark-testing-372706.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180497422288:android:b967670154d1f9d8028bd5",
+        "android_client_info": {
+          "package_name": "com.spark_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180497422288-3i0r7eqmn3geca2ruvl5gcumr0a91rco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spark_admin",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "180497422288-e8ds3o18bkrqt1b7v1kg6rs320t7242g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB50gpfRjNOcei_zUYZZFRn5ZrpI_UbWSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180497422288-e8ds3o18bkrqt1b7v1kg6rs320t7242g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "180497422288-n63hh6et9kfj4s8lphna71uhk5djt91f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Nisum.Spark"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
