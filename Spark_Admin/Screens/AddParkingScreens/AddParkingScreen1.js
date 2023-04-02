@@ -2,7 +2,6 @@ import  React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, FlatList, Button } from "react-native";
 
 const AddParkingScreen1 = ({props}) => {
-    
     const [isChecked, setChecked] = useState(false);
     const checkBoxTapped = () => {
         if(isChecked == true ) {

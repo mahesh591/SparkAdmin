@@ -5,20 +5,19 @@ import { View, Text,TextInput,FlatList ,StyleSheet,TouchableOpacity,Image, Scrol
     Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, setDoc } from "firebase/firestore"; 
-// import { FlatList, TextInput } from 'react-native-gesture-handler';
-
 import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
 import { async } from '@firebase/util';
 import DocumentPicker from 'react-native-document-picker';
 import firestore, { firebase } from '@react-native-firebase/firestore';
-import { getStorage, ref } from "firebase/storage";
-import { db } from '../Components/config';
-// import ImagePicker from 'react-native-image-picker';
-import ImagePicker from 'react-native-image-crop-picker';
-import AddParkingScreen1 from './AddParkingScreens/AddParkingScreen1';
+import { getStorage, ref , uploadBytes, getDownloadURL } from "firebase/storage";
+// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from '../Components/config';
+// import ImagePicker from 'react-native-image-crop-picker';
+
+// import AddParkingScreen1 from './AddParkingScreens/AddParkingScreen1';
 // import AddParkingScreen2 from './AddParkingScreens/AddParkingScreen2';
-import AddParkingScreen3 from './AddParkingScreens/AddParkingScreen3';
+// import AddParkingScreen3 from './AddParkingScreens/AddParkingScreen3';
 
 
 function CreateParkingLot({ navigation, prop }) {
@@ -38,6 +37,7 @@ function CreateParkingLot({ navigation, prop }) {
   const [parkingData, setParkingdata ]= useState([]);
   const [imagesToAdd, setImagesToAdd] = useState([]);
   const [valBool, setValBool] = useState(false);
+
 
   useEffect(() =>
   {
@@ -84,12 +84,9 @@ getUser = () => {
 .collection('ParkingDetails')
 .get()
 .then(querySnapshot => {
-  // console.log('Total users: ', querySnapshot.size);
 
   querySnapshot.forEach(documentSnapshot => {
     setParkingdata(oldArray => [...oldArray,documentSnapshot.data()] );
-  //  console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
- 
   });
 });
 };
@@ -135,28 +132,42 @@ const selectDoc = async () => {
 }
 
 selectFile = () => {
-  ImagePicker.openPicker({
-    width: 300,
-    height: 400,
-    cropping: true,
-    multiple: true
-  }).then(image => {
-    // console.log(image);
-     setImagesToAdd(...image);
-     console.log('imgs to add',imagesToAdd);
-  });
+  // ImagePicker.openPicker({
+  //   width: 300,
+  //   height: 400,
+  //   cropping: true,
+  //   multiple: true
+  // }).then(image => {
+  //   console.log(image);
+  //    setImagesToAdd(...image);
+  //    const imageRef = ref(storage, 'imageNameTest');
+  //    var base64 = getBase64Image(image);
+  //    console.log(base64);
+  // //    uploadBytes(imageRef, base64).then(() => {
+  // //     console.log("see that")
+  // // });
+  //    console.log('imgs to add',imagesToAdd);
+  // });
 };
 
+function getBase64Image(img) {
+  var canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  var dataURL = canvas.toDataURL("image/png");
+  return dataURL.replace(/^data:image\/?[A-z]*;base64,/);
+}
 
     return (
-    
       <ScrollView style={styles.scrollView}>
       <View style={{ flex: 1, marginTop: 50 ,marginLeft: 20, marginRight: 20}}>
-     <AddParkingScreen1  setParkingSlotName parkingSlotName/>
+     {/* <AddParkingScreen1  setParkingSlotName parkingSlotName/> */}
      {/* <AddParkingScreen2 /> */}
      {/* <AddParkingScreen3 /> */}
         
-    {/* <Text>Parking Name</Text>
+    <Text>Parking Name</Text>
         <TextInput style={{paddingLeft:15,paddingRight:15, borderWidth: 0.5, borderColor:'gray',borderRadius: 15,marginLeft:20,marginRight:20,marginTop:5,height:40}} placeholder='Enter location Name' onChangeText={newText => setParkingSlotName(newText)}
         defaultValue={parkingSlotName} ></TextInput>
 
@@ -201,24 +212,15 @@ selectFile = () => {
          <Text style= {styles.TextStyling}> Images </Text>
 
          <View style={{marginHorizontal: 40 }}>
-         <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title='abcd' />}
-        keyExtractor={item => item.id}
-        horizontal={true}
-        scrollEnabled
-        showsHorizontalScrollIndicator={false}
-      />
-          <Button title="Add Image" onPress={this.selectFile} />
+    
+          {/* <Button title="Add Image" onPress={this.selectFile} /> */}
         </View>
-
-        <Text style= {styles.TextStyling}> Accessories </Text>
         <TouchableOpacity
             activeOpacity={0.5} onPress={createParkingLot}>
             <View style = {{justifyContent:'center',alignItems:'center'}}>
                    <Text style = {{fontSize:30}} >Save</Text>
             </View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       </ScrollView>
 
