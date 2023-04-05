@@ -20,16 +20,16 @@ const MapScreen = ({navigation}) => {
   const [
     currentLongitude,
     setCurrentLongitude
-  ] = useState('...');
+  ] = useState(0);
   const [
     currentLatitude,
     setCurrentLatitude
-  ] = useState('...');
+  ] = useState(0);
   const [
     locationStatus,
     setLocationStatus
   ] = useState('');
-
+  let watchID;
   useEffect(() => {
     const requestLocationPermission = async () => {
       if (Platform.OS === 'ios') {
@@ -71,11 +71,11 @@ const MapScreen = ({navigation}) => {
 
         //getting the Longitude from the location json
         const currentLongitude = 
-          JSON.stringify(position.coords.longitude);
+          position.coords.longitude;
 
         //getting the Latitude from the location json
         const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+          position.coords.latitude;
 
         //Setting Longitude state
         setCurrentLongitude(currentLongitude);
@@ -104,12 +104,12 @@ const MapScreen = ({navigation}) => {
 
         //getting the Longitude from the location json        
         const currentLongitude =
-          JSON.stringify(position.coords.longitude);
-
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
-
+          position.coords.longitude;
+          
+          //getting the Latitude from the location json
+          const currentLatitude = 
+          position.coords.latitude;
+          
         //Setting Longitude state
         setCurrentLongitude(currentLongitude);
 
@@ -158,7 +158,6 @@ const MapScreen = ({navigation}) => {
       onPress={ (event) =>{
         setCurrentLatitude(event.nativeEvent.coordinate.latitude)
         setCurrentLongitude(event.nativeEvent.coordinate.longitude)
-        console.log('lat long:',event.nativeEvent.coordinate.latitude,event.nativeEvent.coordinate.longitude)
       } }>
       <Marker coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}   />
     </MapView>

@@ -168,7 +168,7 @@ function getBase64Image(img) {
      {/* <AddParkingScreen3 /> */}
         
     <Text>Parking Name</Text>
-        <TextInput style={{paddingLeft:15,paddingRight:15, borderWidth: 0.5, borderColor:'gray',borderRadius: 15,marginLeft:20,marginRight:20,marginTop:5,height:40}} placeholder='Enter location Name' onChangeText={newText => setParkingSlotName(newText)}
+        <TextInput style={{paddingLeft:15,paddingRight:15, borderWidth: 0.5, borderColor:'gray',borderRadius: 15,marginLeft:20,marginRight:20,marginTop:5,height:40, color: 'black'}} placeholder='Enter location Name' onChangeText={newText => setParkingSlotName(newText)}
         defaultValue={parkingSlotName} ></TextInput>
 
     <Text style={styles.TextStyling}>Parking Location</Text>
