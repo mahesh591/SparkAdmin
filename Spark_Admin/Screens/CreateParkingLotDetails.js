@@ -3,7 +3,6 @@ import { View, Text,TextInput,FlatList ,StyleSheet,TouchableOpacity,Image, Scrol
     StatusBar,
     Button,
     Alert} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, GeoPoint, setDoc } from "firebase/firestore"; 
 // import { FlatList, TextInput } from 'react-native-gesture-handler';
 

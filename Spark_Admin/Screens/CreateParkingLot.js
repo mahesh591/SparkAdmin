@@ -3,7 +3,6 @@ import  React, { useState,useEffect } from 'react';
 import { View, Text,TextInput,FlatList ,StyleSheet,TouchableOpacity,Image, ScrollView,
     StatusBar,
     Button} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doc, setDoc } from "firebase/firestore"; 
 import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
@@ -13,6 +12,7 @@ import firestore, { firebase } from '@react-native-firebase/firestore';
 import { getStorage, ref , uploadBytes, getDownloadURL } from "firebase/storage";
 // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from '../Components/config';
+import auth from '@react-native-firebase/auth';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 // import AddParkingScreen1 from './AddParkingScreens/AddParkingScreen1';
@@ -46,7 +46,7 @@ function CreateParkingLot({ navigation, prop }) {
   }, [])
 
 createParkingLot = () => {
-  let mobileNumberStr =  AsyncStorage.getItem('mobileNumber');
+  let mobileNumberStr = auth().currentUser.phoneNumber
   const yourGeoPoint = new firebase.firestore.GeoPoint(12.434, 78.983);
 
   firestore()
@@ -54,7 +54,7 @@ createParkingLot = () => {
 .add({
   // let mobileNumberStr =  AsyncStorage.getItem('mobileNumber');
   
-  mobileNumber: mobileNumberStr,
+  mobileNumber: ''+mobileNumberStr,
   Accessories:{
     ccTV: checkBoxCctvIsChecked,
     cleaningService: checkBoxCleaningService,

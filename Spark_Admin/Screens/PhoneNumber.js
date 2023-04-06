@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     keyboardType:'phone-pad',
     width: 300,
     marginVertical: 30,
-    fontSize: 25,
+    fontSize: 20,
     padding: 10,
     borderRadius: 8,
     color: 'black',

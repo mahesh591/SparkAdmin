@@ -22,6 +22,7 @@ getUser = () => {
   setParkingdata([])
   firestore()
 .collection('ParkingDetails')
+.where('mobileNumber','==',""+auth().currentUser.phoneNumber)
 .get()
 .then(querySnapshot => {
   // console.log('Total users: ', querySnapshot.size);

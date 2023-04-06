@@ -2,7 +2,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,8 @@ import {
 } from "react-native";
 import {Picker} from '@react-native-picker/picker';
 import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
+import AppContext from "../Components/src/store/auth-context";
 export default function SignupScreen({ navigation }) {
  
   const [userName, setUserName] = useState("");
@@ -23,16 +24,22 @@ export default function SignupScreen({ navigation }) {
   const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { updateValue, LoggedIn } = useContext(AppContext);
   // const [selectedValue, setSelectedValue] = useState("java");
   // const [selectedLanguage, setSelectedLanguage] = useState("java");
 
 
   saveUserDetails=() => {
-    AsyncStorage.setItem('userName', userName);
-    AsyncStorage.setItem('email', email);
-    AsyncStorage.setItem('mobileNumber', mobileNumber);
-    navigation.navigate('Home')
-
+    // AsyncStorage.setItem('userName', userName);
+    // AsyncStorage.setItem('email', email);
+    // AsyncStorage.setItem('mobileNumber', mobileNumber);
+    // navigation.replace('Home')
+    LoggedIn()
+// console.log('removed elements');
+//     AsyncStorage.removeItem('userName')
+//     AsyncStorage.removeItem('email')
+//     AsyncStorage.removeItem('mobileNumber')
+    
   }
 
   
