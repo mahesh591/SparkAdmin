@@ -7,6 +7,7 @@ export default function OTP(props) {
   const [code, setCode] = useState('');
 
   return (
+    <>
     <KeyboardAvoidingScrollView>
       <ScrollView>
     <View style={styles.screen}>
@@ -27,6 +28,7 @@ export default function OTP(props) {
     </View>
     </ScrollView>
     </KeyboardAvoidingScrollView>
+    </>
   );
 }
 

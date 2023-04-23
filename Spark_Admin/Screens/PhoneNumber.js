@@ -7,6 +7,7 @@ export default function PhoneNumber(props) {
   const [phoneNumber, setPhoneNumber] = useState(null);
 
   return (
+<>
 <KeyboardAvoidingScrollView>
 <ScrollView>
     <View style={styles.screen}>
@@ -25,6 +26,7 @@ export default function PhoneNumber(props) {
     </View>
     </ScrollView>
     </KeyboardAvoidingScrollView>
+    </>
   );
 }
 
