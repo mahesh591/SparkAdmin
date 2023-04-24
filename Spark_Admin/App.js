@@ -91,9 +91,6 @@ function AuthenticatedStack() {
           ),
         }}
       />
-      {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
-     <Stack.Screen name="CreateParkingLot" component={CreateParkingLotScren} />
-</Stack.Group> */}
       <Stack.Screen name="CreateParkingLot" component={CreateParkingLotScren} />
       <Stack.Screen
         name="CreateParkinLotDetail"
@@ -101,7 +98,6 @@ function AuthenticatedStack() {
       />
       <Stack.Screen name="Detail" component={DetailScreen} />
       <Stack.Screen name="MapScreen" component={MapScreen} />
-      {/* <Stack.Screen name="Detail" component={DetailScreen} /> */}
     </Stack.Navigator>
   );
 }
