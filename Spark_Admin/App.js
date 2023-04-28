@@ -13,6 +13,7 @@ import MapScreen from './Screens/MapScreen';
 import auth from '@react-native-firebase/auth';
 import {AppProvider} from './Components/src/store/auth-context';
 import AppContext from './Components/src/store/auth-context';
+import DrawerNavigator from './Components/DrawerNavigator';
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -80,15 +81,17 @@ function AuthenticatedStack() {
   };
 
   return (
+    // <DrawerNavigator />
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
-        component={HomeScreen}
+        component={DrawerNavigator}
         options={{
           headerBackVisible: false,
           headerRight: () => (
             <Button onPress={this.signOutUser} title="SignOut" />
           ),
+          headerShown: false
         }}
       />
       <Stack.Screen name="CreateParkingLot" component={CreateParkingLotScren} />
