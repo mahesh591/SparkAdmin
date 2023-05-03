@@ -1,4 +1,4 @@
-import { firebase } from "@react-native-firebase/auth";
+import * as fb from "firebase/app";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -14,9 +14,10 @@ const firebaseConfig = {
   };
   
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  const app = fb.initializeApp(firebaseConfig);
   const auth = getAuth(app);
   export const storage = getStorage(app);
+  export const fireb = fb;
   // if(! firebase.app.length) {
   //   firebase.initializeApp(firebaseConfig);
   // }

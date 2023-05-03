@@ -58,7 +58,7 @@ export default App;
 function AuthStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Logindd" component={LoginScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
       {/* <Stack.Screen name="Signup" component={SignupScreen} options={{ headerBackVisible:false }}/> */}
     </Stack.Navigator>
   );

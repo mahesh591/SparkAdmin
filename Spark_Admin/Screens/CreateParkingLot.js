@@ -4,14 +4,15 @@ import { View, Text,TextInput,FlatList ,StyleSheet,TouchableOpacity,Image, Scrol
     StatusBar,
     Button} from 'react-native';
 import { doc, setDoc } from "firebase/firestore"; 
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
 import { async } from '@firebase/util';
 import DocumentPicker from 'react-native-document-picker';
 import firestore, { firebase } from '@react-native-firebase/firestore';
-import { getStorage, ref , uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref , uploadBytes, uploadString, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from '../Components/config';
+import { db, storage, fireb } from '../Components/config';
 import auth from '@react-native-firebase/auth';
 // import ImagePicker from 'react-native-image-crop-picker';
 
@@ -37,12 +38,13 @@ function CreateParkingLot({ navigation, prop }) {
   const [parkingData, setParkingdata ]= useState([]);
   const [imagesToAdd, setImagesToAdd] = useState([]);
   const [valBool, setValBool] = useState(false);
+  const [image, setImage] = useState(null);
 
 
   useEffect(() =>
   {
      getUser();
-    
+     uploadFile();
   }, [])
 
 createParkingLot = () => {
@@ -92,10 +94,6 @@ getUser = () => {
 };
 
 
-function selectImage() {
-
-}
-
 const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -116,13 +114,30 @@ const Item = ({title}) => (
     <Text style={styles.title}>{title}</Text>
   </View>
 );
+const uploadFile = async(base64Data) => {
+  // const storageRef = ref(storage, `files/test.jpg`);
+  // const storageRef = firebase.storage().ref('files/image.jpg');
+  console.log("inside upload file: storage: ", fireb.storage().ref('test.jpg'));
+  // try {
+  //   const uploadTask = storageRef.put(base64Data)
+  // } catch (error) {
+  //   console.log('see err: ', error);
+  // }
+
+};
 
 const selectDoc = async () => {
   try {
    const doc = await DocumentPicker.pickMultiple({
-    type: [DocumentPicker.types.pdf,DocumentPicker.types.images]
+    type: [DocumentPicker.types.images]
    });
-    console.log(doc)
+   const response = await fetch(doc[0].uri);
+   const blobs = await response.blob();
+  // const fsData = await ReactNativeBlobUtil.fs.readFile(doc[0].uri, 'base64')
+  console.log('see doc: ', blobs);
+  uploadFile(blobs);
+  setImage(doc[0].uri)
+
   } catch(err) {
       if(DocumentPicker.isCancel(err))
       console.log("User cancelled the upload",err);
@@ -205,6 +220,8 @@ function getBase64Image(img) {
         </View>
 
         <Text style= {styles.TextStyling}> Documents picker </Text>
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+
         <View style={{marginHorizontal: 40 }}>
           <Button title="Select Document" onPress={selectDoc} />
         </View>
