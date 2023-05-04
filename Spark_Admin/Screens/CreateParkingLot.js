@@ -9,6 +9,7 @@ import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
 import { async } from '@firebase/util';
 import DocumentPicker from 'react-native-document-picker';
+import { launchImageLibrary} from 'react-native-image-picker';
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import { getStorage, ref , uploadBytes, uploadString, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -44,7 +45,6 @@ function CreateParkingLot({ navigation, prop }) {
   useEffect(() =>
   {
      getUser();
-     uploadFile();
   }, [])
 
 createParkingLot = () => {
@@ -135,7 +135,7 @@ const selectDoc = async () => {
    const blobs = await response.blob();
   // const fsData = await ReactNativeBlobUtil.fs.readFile(doc[0].uri, 'base64')
   console.log('see doc: ', blobs);
-  uploadFile(blobs);
+  // uploadFile(blobs);
   setImage(doc[0].uri)
 
   } catch(err) {
@@ -164,6 +164,14 @@ selectFile = () => {
   //    console.log('imgs to add',imagesToAdd);
   // });
 };
+const selectImages = async () => {
+  const options = {
+    mediaType: 'photo',
+    selectionLimit: 3
+  };
+  const result = await launchImageLibrary(options);
+  setImagesToAdd([...result.assets])
+}
 
 function getBase64Image(img) {
   var canvas = document.createElement("canvas");
@@ -230,7 +238,12 @@ function getBase64Image(img) {
 
          <View style={{marginHorizontal: 40 }}>
     
-          {/* <Button title="Add Image" onPress={this.selectFile} /> */}
+          <Button title="Add Image" onPress={selectImages} />
+          <View style={{display: 'flex', flexDirection: 'row', gap: '8px' }}>
+          {imagesToAdd.map((img, index) => {
+            return (<Image source={{ uri: img.uri }} style={{ width: 50, height: 50, flex: 1 }} key={index}/>)
+          })}
+          </View>
         </View>
         <TouchableOpacity
             activeOpacity={0.5} onPress={createParkingLot}>
