@@ -84,7 +84,7 @@ function AuthenticatedStack() {
     // <DrawerNavigator />
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="Home1"
         component={DrawerNavigator}
         options={{
           headerBackVisible: false,

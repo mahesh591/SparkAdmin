@@ -10,13 +10,13 @@ function ProfileScreen({ navigation }) {
         <Text style={{padding:10}}>
                 Name : 
         </Text>
-        <Text style={{padding:10}}>
+        <Text style={{padding:10, color:"black"}}>
                 MobileNumber : 
         </Text>
-        <Text style={{padding:10}}>
+        <Text style={{padding:10, color:"black"}}>
                 Email : 
         </Text>
-        <Text style={{padding:10}}>
+        <Text style={{padding:10, color:"black"}}>
                 Parking slots available : 
         </Text>
     </View>
