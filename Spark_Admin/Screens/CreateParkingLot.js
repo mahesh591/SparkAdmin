@@ -1,19 +1,16 @@
 
 import  React, { useState,useEffect } from 'react';
-import { View, Text,TextInput,FlatList ,StyleSheet,TouchableOpacity,Image, ScrollView,
+import { View, Text,TextInput,StyleSheet,TouchableOpacity,Image, ScrollView,
     StatusBar,
     Button} from 'react-native';
-import { doc, setDoc } from "firebase/firestore"; 
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
-import { async } from '@firebase/util';
 import DocumentPicker from 'react-native-document-picker';
 import { launchImageLibrary} from 'react-native-image-picker';
 import firestore, { firebase } from '@react-native-firebase/firestore';
-import { getStorage, ref , uploadBytes, uploadString, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage, fireb } from '../Components/config';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db, storage } from '../Components/config';
 import auth from '@react-native-firebase/auth';
 // import ImagePicker from 'react-native-image-crop-picker';
 
@@ -76,12 +73,10 @@ createParkingLot = () => {
 })
 .then(() => {
   console.log('User added!');
-
-
 });
 };
 
-getUser = () => {
+const getUser = () => {
   firestore()
 .collection('ParkingDetails')
 .get()
@@ -94,38 +89,6 @@ getUser = () => {
 };
 
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
-
-const Item = ({title}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-const uploadFile = async(base64Data) => {
-  // const storageRef = ref(storage, `files/test.jpg`);
-  // const storageRef = firebase.storage().ref('files/image.jpg');
-  console.log("inside upload file: storage: ", fireb.storage().ref('test.jpg'));
-  // try {
-  //   const uploadTask = storageRef.put(base64Data)
-  // } catch (error) {
-  //   console.log('see err: ', error);
-  // }
-
-};
-
 const selectDoc = async () => {
   try {
    const doc = await DocumentPicker.pickMultiple({
@@ -133,9 +96,6 @@ const selectDoc = async () => {
    });
    const response = await fetch(doc[0].uri);
    const blobs = await response.blob();
-  // const fsData = await ReactNativeBlobUtil.fs.readFile(doc[0].uri, 'base64')
-  console.log('see doc: ', blobs);
-  // uploadFile(blobs);
   setImage(doc[0].uri)
 
   } catch(err) {
@@ -146,24 +106,6 @@ const selectDoc = async () => {
   }
 }
 
-selectFile = () => {
-  // ImagePicker.openPicker({
-  //   width: 300,
-  //   height: 400,
-  //   cropping: true,
-  //   multiple: true
-  // }).then(image => {
-  //   console.log(image);
-  //    setImagesToAdd(...image);
-  //    const imageRef = ref(storage, 'imageNameTest');
-  //    var base64 = getBase64Image(image);
-  //    console.log(base64);
-  // //    uploadBytes(imageRef, base64).then(() => {
-  // //     console.log("see that")
-  // // });
-  //    console.log('imgs to add',imagesToAdd);
-  // });
-};
 const selectImages = async () => {
   const options = {
     mediaType: 'photo',
@@ -171,16 +113,25 @@ const selectImages = async () => {
   };
   const result = await launchImageLibrary(options);
   setImagesToAdd([...result.assets])
-}
-
-function getBase64Image(img) {
-  var canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
-  var ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
-  var dataURL = canvas.toDataURL("image/png");
-  return dataURL.replace(/^data:image\/?[A-z]*;base64,/);
+  console.log("see res: ", result);
+  let uri = result.assets[0].uri
+  const response = await fetch(uri);
+  const blobs = await response.blob();
+  const meta = {
+    contentType: 'image/jpeg'
+  };
+  const storageRef = ref(storage, 'test/aa');
+  const uploadTask = uploadBytesResumable(storageRef, blobs, meta);
+  uploadTask.on('state_changed', (snapshot) => {
+    console.log("see state changed: ", snapshot);
+  },
+  (error) => {
+    console.log("see error: ", error);
+  }, async () => {
+    const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+    console.log("download url: ", downloadUrl);
+  });
+  console.log("see stor: ", blobs);
 }
 
     return (
@@ -241,7 +192,7 @@ function getBase64Image(img) {
           <Button title="Add Image" onPress={selectImages} />
           <View style={{display: 'flex', flexDirection: 'row', gap: '8px' }}>
           {imagesToAdd.map((img, index) => {
-            return (<Image source={{ uri: img.uri }} style={{ width: 50, height: 50, flex: 1 }} key={index}/>)
+            return (<Image source={{ uri: img.uri }} style={{ width: "20%", height: 50, flex: 1 }} key={index}/>)
           })}
           </View>
         </View>
@@ -251,9 +202,9 @@ function getBase64Image(img) {
                    <Text style = {{fontSize:30}} >Save</Text>
             </View>
         </TouchableOpacity>
+        <ActivityIndicator animating={true} color={MD2Colors.red800} />
       </View>
       </ScrollView>
-
     );
   }
 

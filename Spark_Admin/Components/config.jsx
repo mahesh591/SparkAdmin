@@ -14,11 +14,8 @@ const firebaseConfig = {
   };
   
   // Initialize Firebase
-  const app = fb.initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  export const auth = getAuth(app);
+  export const firestore = getFirestore(app);
   export const storage = getStorage(app);
   export const fireb = fb;
-  // if(! firebase.app.length) {
-  //   firebase.initializeApp(firebaseConfig);
-  // }
-  // export {firebase};
