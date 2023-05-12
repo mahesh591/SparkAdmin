@@ -49,13 +49,6 @@ function CreateParkingLot({navigation, prop}) {
   createParkingLot = () => {
     let mobileNumberStr = auth().currentUser.phoneNumber;
     const yourGeoPoint = new firebase.firestore.GeoPoint(12.434, 78.983);
-
-    firestore()
-      .collection('ParkingDetails')
-      .add({
-        // let mobileNumberStr =  AsyncStorage.getItem('mobileNumber');
-
-
   firestore()
 .collection('ParkingDetails')
 .add({
@@ -81,7 +74,7 @@ function CreateParkingLot({navigation, prop}) {
 })
 .then(() => {
   console.log('User added!');
-});
+})
 };
 
 const getUser = () => {
@@ -122,87 +115,13 @@ const selectDoc = async () => {
     console.log("download url: ", downloadUrl);
   });
   console.log("see stor: ", blobs);
-
-
-
-
-
   } catch(err) {
       if(DocumentPicker.isCancel(err))
       console.log("User cancelled the upload",err);
       else
       console.log(err);
   }
-}
-
-const selectImages = async () => {
-  const options = {
-    mediaType: 'photo',
-    selectionLimit: 3
-  };
-  const result = await launchImageLibrary(options);
-  setImagesToAdd([...result.assets])
-  console.log("see res: ", result);
-
-  // var str1 = result.assets[0].uri
-  // str1 = str1.replace('file://','')
-
-  let uri = result.assets[0].uri
-
-//   const compressedUr = await Image.compress(uri, {
-//   compressionMethod: 'auto',
-// });
-
-  // if(Platform.OS == 'ios'){
-  //   console.log('print Str1',str1);
-  //   uri = str1
-  // } 
-  
-  // ImageResizer.createResizedImage(
-  //   uri,
-  //   150,
-  //   150,
-  //   'JPEG',
-  //   100,
-  //   0,
-  //   undefined,
-  //   false,
-  // )
-  //   .then(resizedImageUri => {
-  //     // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
-  //     console.log("compressed url:", resizedImageUri);
-  //   })
-  //   .catch(err => {
-  //     // Oops, something went wrong. Check that the filename is correct and
-  //     // inspect err to get more details.
-  //     console.log("some thing went wrong");
-  //   });
-  
-  
-  const response = await fetch(uri);
-  const blobs = await response.blob();
-  const meta = {
-    contentType: 'image/jpeg'
-  };
-
-  const selectDoc = async () => {
-    console.log('selecting doc');
-    try {
-      const doc = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-        copyTo: 'cachesDirectory'
-      });
-      const uri = decodeURIComponent(doc[0].uri)
-      console.log("see doc: ", doc, uri);
-      const response = await fetch(uri);
-      // const xhr = new XMLHttpRequest();
-      // const blobs = await response.blob();
-    } catch (err) {
-      if (DocumentPicker.isCancel(err))
-        console.log('User cancelled the upload', err);
-      else console.log(err);
-    }
-  };
+};
 
   const selectImages = async () => {
     const options = {
