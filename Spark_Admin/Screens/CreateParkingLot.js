@@ -1,16 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  StatusBar,
-  Button,
-} from 'react-native';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+
+
+import  React, { useState,useEffect } from 'react';
+import { View, Text,TextInput,StyleSheet,TouchableOpacity,Image, ScrollView,
+    StatusBar,
+    Button,
+    Platform} from 'react-native';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import StepperComponent from '../Components/StepperComponent';
 import CheckBoxComponent from '../Components/CheckBoxComponent';
 import DocumentPicker from 'react-native-document-picker';
@@ -19,6 +14,8 @@ import firestore, {firebase} from '@react-native-firebase/firestore';
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {db, storage} from '../Components/config';
 import auth from '@react-native-firebase/auth';
+
+// import { Image } from 'react-native-compressor';
 // import ImagePicker from 'react-native-image-crop-picker';
 
 // import AddParkingScreen1 from './AddParkingScreens/AddParkingScreen1';
@@ -58,37 +55,134 @@ function CreateParkingLot({navigation, prop}) {
       .add({
         // let mobileNumberStr =  AsyncStorage.getItem('mobileNumber');
 
-        mobileNumber: '' + mobileNumberStr,
-        Accessories: {
-          ccTV: checkBoxCctvIsChecked,
-          cleaningService: checkBoxCleaningService,
-          mechanicService: checkBoxMechanicService,
-        },
-        parkingSpaceAllotted: {
-          noOfBikeParkingSlots: noOfBikeParkingSlots,
-          noOfCarParkingSlots: noOfCarParkingSlots,
-          noOfElectricCarParkingSlots: noOfElectricCarParkingSlots,
-          noOfElectricTruckParkingSlots: noOfElectricTruckParkingSlots,
-          noOfTruckParkingSlots: noOfTruckParkingSlots,
-        },
-        parkingName: parkingSlotName,
-        parkingLocation: parkingSlotLocation,
-        parkingPoint: yourGeoPoint,
-      })
-      .then(() => {
-        console.log('User added!');
-      });
-  };
 
-  const getUser = () => {
-    firestore()
-      .collection('ParkingDetails')
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          setParkingdata(oldArray => [...oldArray, documentSnapshot.data()]);
-        });
-      });
+  firestore()
+.collection('ParkingDetails')
+.add({
+  // let mobileNumberStr =  AsyncStorage.getItem('mobileNumber');
+  
+  mobileNumber: ''+mobileNumberStr,
+  Accessories:{
+    ccTV: checkBoxCctvIsChecked,
+    cleaningService: checkBoxCleaningService,
+    mechanicService: checkBoxMechanicService,
+  },
+  parkingSpaceAllotted:{
+  noOfBikeParkingSlots: noOfBikeParkingSlots,
+  noOfCarParkingSlots: noOfCarParkingSlots,
+  noOfElectricCarParkingSlots: noOfElectricCarParkingSlots,
+  noOfElectricTruckParkingSlots: noOfElectricTruckParkingSlots,
+  noOfTruckParkingSlots: noOfTruckParkingSlots,
+  },
+  parkingName: parkingSlotName,
+  parkingLocation: parkingSlotLocation,
+  parkingPoint:yourGeoPoint
+
+})
+.then(() => {
+  console.log('User added!');
+});
+};
+
+const getUser = () => {
+  firestore()
+.collection('ParkingDetails')
+.get()
+.then(querySnapshot => {
+
+  querySnapshot.forEach(documentSnapshot => {
+    setParkingdata(oldArray => [...oldArray,documentSnapshot.data()] );
+  });
+});
+};
+
+
+const selectDoc = async () => {
+  try {
+   const doc = await DocumentPicker.pickSingle({
+    type: [DocumentPicker.types.pdf]
+   });
+   console.log("docs", doc);
+   const response = await fetch(doc.uri);
+   const blobs = await response.blob();
+  // setImage(doc[0].uri)
+   
+  const meta = {
+    contentType: doc.type
+  };
+  const storageRef = ref(storage, 'test/aa');
+  const uploadTask = uploadBytesResumable(storageRef, blobs, meta);
+  uploadTask.on('state_changed', (snapshot) => {
+    console.log("see state changed: ", snapshot);
+  },
+  (error) => {
+    console.log("see error: ", error);
+  }, async () => {
+    const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+    console.log("download url: ", downloadUrl);
+  });
+  console.log("see stor: ", blobs);
+
+
+
+
+
+  } catch(err) {
+      if(DocumentPicker.isCancel(err))
+      console.log("User cancelled the upload",err);
+      else
+      console.log(err);
+  }
+}
+
+const selectImages = async () => {
+  const options = {
+    mediaType: 'photo',
+    selectionLimit: 3
+  };
+  const result = await launchImageLibrary(options);
+  setImagesToAdd([...result.assets])
+  console.log("see res: ", result);
+
+  // var str1 = result.assets[0].uri
+  // str1 = str1.replace('file://','')
+
+  let uri = result.assets[0].uri
+
+//   const compressedUr = await Image.compress(uri, {
+//   compressionMethod: 'auto',
+// });
+
+  // if(Platform.OS == 'ios'){
+  //   console.log('print Str1',str1);
+  //   uri = str1
+  // } 
+  
+  // ImageResizer.createResizedImage(
+  //   uri,
+  //   150,
+  //   150,
+  //   'JPEG',
+  //   100,
+  //   0,
+  //   undefined,
+  //   false,
+  // )
+  //   .then(resizedImageUri => {
+  //     // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
+  //     console.log("compressed url:", resizedImageUri);
+  //   })
+  //   .catch(err => {
+  //     // Oops, something went wrong. Check that the filename is correct and
+  //     // inspect err to get more details.
+  //     console.log("some thing went wrong");
+  //   });
+  
+  
+  const response = await fetch(uri);
+  const blobs = await response.blob();
+  const meta = {
+    contentType: 'image/jpeg'
   };
 
   const selectDoc = async () => {
