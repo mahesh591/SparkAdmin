@@ -11,7 +11,7 @@ export default function PhoneNumber(props) {
 <KeyboardAvoidingScrollView>
 <ScrollView>
     <View style={styles.screen}>
-       <Image source={require('../Images/parkingLogo1.png')} 
+       <Image source={require('../Images/parkingLogoo.png')} 
            style={{width: 350, height: 350,flex:0.5, marginBottom: 30}} />
 
       <Text style={styles.text}>Enter Phone Number</Text>
